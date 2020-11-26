@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Korbit.API;
+using Korbit.Model;
 using Korbit.Web;
 using static Korbit.API.APIBase;
 

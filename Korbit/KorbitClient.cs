@@ -17,10 +17,10 @@ namespace Korbit
         private readonly string clientId;
         private readonly string clientSecret;  
         private readonly string credentials = "client_credentials";
-        private static API.oauth2.AccessToken.Response cachedToken = null;
+        private static Model.AccessToken cachedToken = null;
         public string ClientId => this.clientId; 
         public string ClientSecret => this.clientSecret; 
-        public static AccessToken.Response CachedToken { get => cachedToken; set => cachedToken = value; }
+        public static Model.AccessToken CachedToken { get => cachedToken; set => cachedToken = value; }
         public static Requester requester = new Requester();
 
 

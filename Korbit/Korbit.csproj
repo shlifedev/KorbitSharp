@@ -51,10 +51,11 @@
     <Compile Include="API\user\Balances.cs" />
     <Compile Include="API\oauth2\AccessToken.cs" />
     <Compile Include="API\APIBase.cs" />
+    <Compile Include="Model\AccessToken.cs" />
     <Compile Include="Model\OrderBook.cs" />
     <Compile Include="Model\TradeShopDetailAll.cs" />
     <Compile Include="Model\TradeShopDetail.cs" />
-    <Compile Include="ECurrencyPair.cs" />
+    <Compile Include="Model\ECurrencyPair.cs" />
     <Compile Include="KorbitClient.cs" />
     <Compile Include="Model\Balance.cs" />
     <Compile Include="Program.cs" />
