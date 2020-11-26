@@ -22,10 +22,10 @@ namespace Korbit
         public string ClientId => this.clientId;
         public string ClientSecret => this.clientSecret;
         public static Model.AccessToken CachedToken { get => cachedToken; set => cachedToken = value; }
-        public static Requester requester = new Requester();
+        public static Requester requester;
 
 
- 
+
         /// <summary>
         /// 코빗 클라이언트를 생성합니다.
         /// </summary>
@@ -33,6 +33,7 @@ namespace Korbit
         /// <param name="clientSecret">코빗에서 발급받은 시크릿 키</param>
         public KorbitClient(string clientId, string clientSecret)
         {
+            requester = new Requester(this);
             this.clientId = clientId;
             this.clientSecret = clientSecret;
 
@@ -52,66 +53,62 @@ namespace Korbit
         /// 잔고를 조회합니다.
         /// </summary>
         /// <returns></returns>
-        public async Task CheckBalances(System.Action<API.user.Balances.Response> callback)
+        public async Task<Model.Balance> CheckBalances()
         {
-            Console.WriteLine("CheckBalances..");
-
-            await API.user.Balances.ReqBalances(callback);
+            return await API.user.Balances.ReqBalances();
         }
         /// <summary>
         /// 잔고를 조회합니다.
         /// </summary>
         /// <returns></returns>
-        public async Task CheckTradeShopDetailed(ECurrencyPair currentcyPair, System.Action<TradeShopDetail> callback)
+        public async Task<Model.TradeShopDetail> CheckTradeShopDetailed(ECurrencyPair currentcyPair)
         {
             Console.WriteLine("CheckTradeShopDetailed..");
-
-            await API.ticker.Detailed.ReqDetailed(currentcyPair, callback);
+            return await API.ticker.Detailed.ReqDetailed(currentcyPair);
         }
         /// <summary>
         /// 코빗에 로그인합니다.
         /// </summary>
-        public async Task Login(System.Action<bool> resultCallback)
+        public async Task<bool> Login(bool refreshToken)
         {
-            Console.WriteLine("Try Login..");
-            if (System.IO.File.Exists("accessToken.json"))
+            
+            if(refreshToken)
             {
-                Console.WriteLine("acces toen cached!");
-                CachedToken = JsonConvert.DeserializeObject<Model.AccessToken>(System.IO.File.ReadAllText("accessToken.json")); 
-            }
-             
-            if (CachedToken == null)
-            {
-                await API.oauth2.AccessToken.ReqLogin(clientId, clientSecret, token =>
+                var token = await API.oauth2.AccessToken.ReqRefresh(clientId, clientSecret, CachedToken.refresh_token);
+                if (token != null)
                 {
                     CachedToken = token;
-                    if (token != null)
-                    {
-                        resultCallback?.Invoke(true);
-                        System.IO.File.WriteAllText("accessToken.json", JsonConvert.SerializeObject(token));
-                    }
-                    else
-                        resultCallback?.Invoke(false);
-
-
-                });
+                    Console.WriteLine("토큰 리프래시됨.");
+                    System.IO.File.WriteAllText("accessToken.json", Newtonsoft.Json.JsonConvert.SerializeObject(CachedToken));
+                    return true;
+                }
+                else
+                    return false;
+            }
+            if (System.IO.File.Exists("accessToken.json"))
+            {
+                Console.WriteLine("기존토큰으로 가져옴.");
+                CachedToken = JsonConvert.DeserializeObject<Model.AccessToken>(System.IO.File.ReadAllText("accessToken.json")); 
+                return true;
             }
             else
             {
-                await API.oauth2.AccessToken.ReqRefresh(clientId, clientSecret, CachedToken.refresh_token, token =>
+                var token = await API.oauth2.AccessToken.ReqLogin(clientId, clientSecret);
+    
+                if (token != null)
                 {
                     CachedToken = token;
-                    if (token != null)
-                    {
-                        resultCallback?.Invoke(true);
-                        System.IO.File.WriteAllText("accessToken.json", JsonConvert.SerializeObject(token));
-                    }
-                    else
-                        resultCallback?.Invoke(false);
-
-                });
-
+                    Console.WriteLine("새 토큰을 요청하여 로그인 성공");
+                    System.IO.File.WriteAllText("accessToken.json", Newtonsoft.Json.JsonConvert.SerializeObject(token));
+                    return true;
+                }
+                else
+                    return false;
             }
+
+
+
+            return false;
         }
     }
 }

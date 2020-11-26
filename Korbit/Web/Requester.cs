@@ -5,55 +5,73 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using static Korbit.API.APIBase; 
+using static Korbit.API.APIBase;
 
 namespace Korbit.Web
 {
     public class Requester
-    { 
+    {
+        KorbitClient client;
+
+        public Requester(KorbitClient client)
+        {
+            this.client = client;
+        }
+
         public string BaseURL => "https://api.korbit.co.kr/v1/";
 
 
-        public async Task Get<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback)
+        public async Task<T> Get<T>(string resource, ParamBase content, bool isRequireToken) where T : Korbit.API.APIBase.ResponseBase
         {
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "GET";
-            if(isRequireToken) 
+            request.Timeout = 3000;
+            if (isRequireToken)
+            {
+                if(KorbitClient.CachedToken == null) 
+                    throw new Exception("Token Null!"); 
                 request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}");
-
-
-            try
+            } 
+             
+            WebResponse response = await request.GetResponseAsync(); 
+            HttpWebResponse httpResponse = response as HttpWebResponse; 
+            var statusCode = ((HttpWebResponse)response).StatusCode;
+            Console.WriteLine("get status code : " + statusCode);
+            string responseJson = "";
+        
+            if (statusCode == HttpStatusCode.Unauthorized)
             {
-                
-                WebResponse response = await request.GetResponseAsync();
-                HttpWebResponse httpResponse = response as HttpWebResponse;
-                var statusCode = ((HttpWebResponse)response).StatusCode;
-                string responseJson = "";
-                if (statusCode == HttpStatusCode.OK)
-                {
-                    using (Stream dataStream = response.GetResponseStream())
-                    {
-                        StreamReader reader = new StreamReader(dataStream);
-                        responseJson = reader.ReadToEnd();
-                        T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson);
-                        callback?.Invoke(responseObject);
-                    }
+                var result = await client.Login(true);
+                if (result == true)
+                { 
+                    Console.WriteLine("retry request");
+                    return await Get<T>(resource, content, isRequireToken);
                 }
-            }catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                Console.WriteLine(request.RequestUri);
-
+                else
+                {
+                    throw new Exception("Unknown Error =>" + statusCode);
+                }
             }
+            if (statusCode == HttpStatusCode.OK)
+            {
+                using (Stream dataStream = response.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(dataStream);
+                    responseJson = reader.ReadToEnd();
+                    T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseObject;
+                }
+            }
+
+            return null;
         }
 
-        public async Task Post<T>(string resource, ParamBase content, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
+        public async Task<T> Post<T>(string resource, ParamBase content) where T : Korbit.API.APIBase.ResponseBase
         {
-            await Post<T>(resource, content, false, callback);
+            return await Post<T>(resource, content, false);
         }
-        public async Task Post<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
-        {  
+        public async Task<T> Post<T>(string resource, ParamBase content, bool isRequireToken) where T : Korbit.API.APIBase.ResponseBase
+        {
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "POST";
 
@@ -65,19 +83,20 @@ namespace Korbit.Web
             WebResponse response = await request.GetResponseAsync();
             HttpWebResponse httpResponse = response as HttpWebResponse;
             var statusCode = ((HttpWebResponse)response).StatusCode;
+            Console.WriteLine("status code : " + statusCode);
             string responseJson = "";
             if (statusCode == HttpStatusCode.OK)
             {
                 using (Stream dataStream = response.GetResponseStream())
                 {
                     StreamReader reader = new StreamReader(dataStream);
-                    responseJson = reader.ReadToEnd(); 
-
-                    T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson); 
-                    callback?.Invoke(responseObject);
+                    responseJson = reader.ReadToEnd();
+                    T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson);
+                    return responseObject;
                 }
             }
-             
+
+            return null;
         }
     }
 }

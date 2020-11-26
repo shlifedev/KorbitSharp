@@ -15,25 +15,12 @@ namespace SampleProgram
             string[] idPass = System.IO.File.ReadAllLines("client_secret.txt");
             KorbitClient client = new KorbitClient(idPass[0],idPass[1]);
 
-            await client.Login(x => {
-                Console.WriteLine("Login Status : " + x);
-
-
-
-            });
-            await client.CheckBalances(balance =>
-            {
-                Console.WriteLine(balance.btc.available);
-            });
-
-            await client.CheckTradeShopDetailed(ECurrencyPair.ltc, detailed =>
-            {
-
-                Console.WriteLine(detailed.Low);
-                Console.WriteLine(detailed.High);
-                Console.WriteLine(detailed.Bid);
-
-            });
+            var login = await client.Login(false); 
+            if(login)
+            {  
+                var balance = await client.CheckBalances(); 
+                Console.WriteLine(balance.available);
+            } 
         }
 
         static async Task Observe()
@@ -47,7 +34,9 @@ namespace SampleProgram
         {
             Connect();
             Observe();
-            while (true) { }
+            while (true)
+            {
+            }
         }
     }
 }

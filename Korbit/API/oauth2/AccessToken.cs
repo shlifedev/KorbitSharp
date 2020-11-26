@@ -14,13 +14,13 @@ namespace Korbit.API.oauth2
 {
     public static class AccessToken
     {
-        public static async Task ReqLogin(string id, string secret, System.Action<Korbit.Model.AccessToken> callback)
+        public static async Task<Model.AccessToken> ReqLogin(string id, string secret)
         {
-            await KorbitClient.requester.Post("oauth2/access_token", new LoginParameter(id, secret), callback);
+            return await KorbitClient.requester.Post<Model.AccessToken>("oauth2/access_token", new LoginParameter(id, secret));
         }
-        public static async Task ReqRefresh(string id, string secret, string refreshToken, System.Action<Korbit.Model.AccessToken> callback)
+        public static async Task<Model.AccessToken> ReqRefresh(string id, string secret, string refreshToken)
         {
-            await KorbitClient.requester.Post("oauth2/access_token", new RefreshParameter(id, secret, refreshToken), callback);
+            return await KorbitClient.requester.Post<Model.AccessToken>("oauth2/access_token", new RefreshParameter(id, secret, refreshToken));
         }
 
         public class LoginParameter : ParamBase

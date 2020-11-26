@@ -16,14 +16,14 @@ namespace Korbit.API.ticker
 {
     public static class Detailed
     {
-        public static async Task ReqDetailed(ECurrencyPair currentcyPair, ECurrencyPair targetCurrentcyPair, System.Action<Model.TradeShopDetail> detail)
+        public static async Task<Model.TradeShopDetail> ReqDetailed(ECurrencyPair currentcyPair, ECurrencyPair targetCurrentcyPair)
         {
-            await KorbitClient.requester.Get("ticker/detailed", new DetailedParameter(currentcyPair, targetCurrentcyPair), false, detail);
+            return await KorbitClient.requester.Get<Model.TradeShopDetail>("ticker/detailed", new DetailedParameter(currentcyPair, targetCurrentcyPair), false);
         }
-        public static async Task ReqDetailed(ECurrencyPair currentcyPair, System.Action<Model.TradeShopDetail> detail)
+        public static async Task<Model.TradeShopDetail> ReqDetailed(ECurrencyPair currentcyPair)
         {
             var targetCurrentcyPair = ECurrencyPair.krw;
-            await KorbitClient.requester.Get("ticker/detailed", new DetailedParameter(currentcyPair, targetCurrentcyPair), false, detail);
+            return await KorbitClient.requester.Get<Model.TradeShopDetail>("ticker/detailed", new DetailedParameter(currentcyPair, targetCurrentcyPair), false);
         }
 
         public class DetailedParameter : ParamBase
