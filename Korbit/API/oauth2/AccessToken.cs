@@ -16,11 +16,11 @@ namespace Korbit.API.oauth2
     {
         public static void ReqLogin(string id, string secret, System.Action<Response> callback)
         {
-            Korbit.Web.Requester.Post("oauth2/access_token", new LoginParameter(id, secret), callback);
+            KorbitClient.requester.Post("oauth2/access_token", new LoginParameter(id, secret), callback);
         }
         public static void ReqRefresh(string id, string secret, string refreshToken, System.Action<Response> callback)
         {
-            Korbit.Web.Requester.Post("oauth2/access_token", new RefreshParameter(id, secret, refreshToken), callback);
+            KorbitClient.requester.Post("oauth2/access_token", new RefreshParameter(id, secret, refreshToken), callback);
         }
 
         public class LoginParameter : ParamBase

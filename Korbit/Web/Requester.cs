@@ -9,12 +9,12 @@ using static Korbit.API.APIBase;
 
 namespace Korbit.Web
 {
-    public static class Requester
+    public class Requester
     { 
-        public static string BaseURL => "https://api.korbit.co.kr/v1/";
+        public string BaseURL => "https://api.korbit.co.kr/v1/";
 
 
-        public static void Get<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback)
+        public void Get<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback)
         {
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "GET";
@@ -38,11 +38,11 @@ namespace Korbit.Web
             }
         }
 
-        public static void Post<T>(string resource, ParamBase content, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
+        public void Post<T>(string resource, ParamBase content, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
         {
             Post<T>(resource, content, false, callback);
         }
-        public static void Post<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
+        public void Post<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
         {  
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "POST";

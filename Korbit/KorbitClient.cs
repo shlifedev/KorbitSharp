@@ -1,8 +1,10 @@
 ﻿using Korbit.API.oauth2;
+using Korbit.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Korbit
@@ -10,6 +12,7 @@ namespace Korbit
     //https://curl.olsh.me/
     public class KorbitClient
     { 
+      
         private readonly string clientId;
         private readonly string clientSecret;  
         private readonly string credentials = "client_credentials";
@@ -17,8 +20,8 @@ namespace Korbit
         public string ClientId => this.clientId; 
         public string ClientSecret => this.clientSecret; 
         public static AccessToken.Response CachedToken { get => cachedToken; set => cachedToken = value; }
+        public static Requester requester = new Requester();
 
-       
 
         /// <summary>
         /// 코빗 클라이언트를 생성합니다.
@@ -29,6 +32,8 @@ namespace Korbit
         {
             this.clientId = clientId;
             this.clientSecret = clientSecret;
+
+            
         }
 
         /// <summary>
@@ -45,7 +50,7 @@ namespace Korbit
         /// </summary>
         /// <returns></returns>
         public void CheckBalances(System.Action<API.user.Balances.Response> callback)
-        {
+        { 
             API.user.Balances.ReqBalances(callback);
         }
         /// <summary>
