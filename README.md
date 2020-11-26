@@ -6,7 +6,7 @@
  
 ## 사용법
 
-KorbitClient 객체를 생성후 Login함수로 어세스토큰 로그인 이후 프로그래밍.
+KorbitClient 객체를 생성후 Login함수로 어세스토큰 획득 이후 프로그래밍.
 
  ```cs
 KorbitClient client = new KorbitClient($ClientId,$ClientSecret);
