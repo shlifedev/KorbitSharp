@@ -1,11 +1,12 @@
-﻿using Korbit.Model;
+﻿using Korbit;
+using Korbit.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Korbit
+namespace SampleProgram
 {
     static class Program
     {
@@ -17,8 +18,8 @@ namespace Korbit
             await client.Login(x => {
                 Console.WriteLine("Login Status : " + x);
 
-              
-               
+
+
             });
             await client.CheckBalances(balance =>
             {

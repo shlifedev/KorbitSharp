@@ -13,6 +13,9 @@ using static Korbit.API.APIBase;
 
 namespace Korbit.API.user
 {
+    /// <summary>
+    /// 사용자의 정보, 잔고 등을 조회할 수 있다.
+    /// </summary>
     public static class Balances
     {
         public static async Task ReqBalances(System.Action<Response> callback)

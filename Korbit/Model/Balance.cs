@@ -8,6 +8,9 @@ using static Korbit.API.APIBase;
 
 namespace Korbit.Model
 {
+    /// <summary>
+    /// 사용자의 정보 및 남은 잔고정보.
+    /// </summary>
     public class Balance : ResponseBase
     {
         /// <summary>
