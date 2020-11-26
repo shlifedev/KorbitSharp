@@ -15,7 +15,23 @@ namespace Korbit
 
             await client.Login(x => {
                 Console.WriteLine("Login Status : " + x);
-            }); 
+
+              
+               
+            });
+            await client.CheckBalances(balance =>
+            {
+                Console.WriteLine(balance.btc.available);
+            });
+
+            await client.CheckTradeShopDetailed(ECurrencyPair.ltc, detailed =>
+            {
+
+                Console.WriteLine(detailed.Low);
+                Console.WriteLine(detailed.High);
+                Console.WriteLine(detailed.Bid);
+
+            });
         }
 
         static async Task Observe()

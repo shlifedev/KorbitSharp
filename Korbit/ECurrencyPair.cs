@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Korbit
 {
-    enum ECurrencyPair
+    public enum ECurrencyPair
     {
          aergo,
          bat,

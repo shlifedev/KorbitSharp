@@ -1,4 +1,5 @@
 ﻿using Korbit.API.oauth2;
+using Korbit.Model;
 using Korbit.Web;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,16 @@ namespace Korbit
             Console.WriteLine("CheckBalances..");
 
             await API.user.Balances.ReqBalances(callback);
+        }
+        /// <summary>
+        /// 잔고를 조회합니다.
+        /// </summary>
+        /// <returns></returns>
+        public async Task CheckTradeShopDetailed(ECurrencyPair currentcyPair, System.Action<TradeShopDetail> callback)
+        {
+            Console.WriteLine("CheckTradeShopDetailed..");
+
+            await API.ticker.Detailed.ReqDetailed(currentcyPair, callback);
         }
         /// <summary>
         /// 코빗에 로그인합니다.

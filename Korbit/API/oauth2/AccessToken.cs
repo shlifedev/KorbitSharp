@@ -14,11 +14,11 @@ namespace Korbit.API.oauth2
 {
     public static class AccessToken
     {
-        public static async Task ReqLogin(string id, string secret, System.Action<Response> callback)
+        public static async Task ReqLogin(string id, string secret, System.Action<Korbit.Model.AccessToken> callback)
         {
             await KorbitClient.requester.Post("oauth2/access_token", new LoginParameter(id, secret), callback);
         }
-        public static async Task ReqRefresh(string id, string secret, string refreshToken, System.Action<Response> callback)
+        public static async Task ReqRefresh(string id, string secret, string refreshToken, System.Action<Korbit.Model.AccessToken> callback)
         {
             await KorbitClient.requester.Post("oauth2/access_token", new RefreshParameter(id, secret, refreshToken), callback);
         }
@@ -48,14 +48,6 @@ namespace Korbit.API.oauth2
                 this.client_secret = client_secret;
                 this.refresh_token = refresh_token;
             }
-        }
-        public class Response  : ResponseBase
-        {
-            public string token_type;
-            public string access_token;
-            public string expires_in;
-            public string scope;
-            public string refresh_token;
-        }
+        } 
     }
 }

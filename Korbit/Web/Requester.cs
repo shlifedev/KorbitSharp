@@ -20,21 +20,31 @@ namespace Korbit.Web
             request.Method = "GET";
             if(isRequireToken) 
                 request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}");
-    
 
-            WebResponse response = await request.GetResponseAsync();
-            HttpWebResponse httpResponse = response as HttpWebResponse;
-            var statusCode = ((HttpWebResponse)response).StatusCode;
-            string responseJson = "";
-            if (statusCode == HttpStatusCode.OK)
+
+            try
             {
-                using (Stream dataStream = response.GetResponseStream())
+                
+                WebResponse response = await request.GetResponseAsync();
+                HttpWebResponse httpResponse = response as HttpWebResponse;
+                var statusCode = ((HttpWebResponse)response).StatusCode;
+                string responseJson = "";
+                if (statusCode == HttpStatusCode.OK)
                 {
-                    StreamReader reader = new StreamReader(dataStream);
-                    responseJson = reader.ReadToEnd(); 
-                    T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson);
-                    callback?.Invoke(responseObject);
+                    using (Stream dataStream = response.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(dataStream);
+                        responseJson = reader.ReadToEnd();
+                        T responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseJson);
+                        callback?.Invoke(responseObject);
+                    }
                 }
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(request.RequestUri);
+
             }
         }
 
