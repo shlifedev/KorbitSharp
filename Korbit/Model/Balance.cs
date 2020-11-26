@@ -63,26 +63,6 @@ namespace Korbit.Model
         /// </summary>
         public long avg_price_updated_at;
 
-
-        /// <summary>
-        /// 거래중인 코인을 포함한 내가 구매한 코인의 평균 단가 
-        /// </summary>
-        public float AvgPrice
-        {
-            get
-            {
-                return avg_price / (available + trade_in_use);
-            }
-        }
-        /// <summary>
-        /// 거래중인 코인을 포함하지않은 내가 구매한 코인의 평균 단가 
-        /// </summary>
-        public float AvgPriceWithoutTrade
-        {
-            get
-            {
-                return avg_price / (available);
-            }
-        }
+ 
     }
 }

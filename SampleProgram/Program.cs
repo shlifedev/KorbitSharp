@@ -15,10 +15,15 @@ namespace SampleProgram
             string[] idPass = System.IO.File.ReadAllLines("client_secret.txt");
             KorbitClient client = new KorbitClient(idPass[0],idPass[1]);
 
-            var login = await client.Login(false); 
-            if(login)
-            { 
-            } 
+            var login = await client.Login(false);
+            if (login)
+            {
+                var balance = await client.CheckBalances();
+                var tradeShop = await client.CheckTradeShopDetailed(ECurrencyPair.ltc);
+                Console.WriteLine("LTC 구매한 평단가 : " + balance.ltc.avg_price);
+                Console.WriteLine("LTC 가격 : " + tradeShop.Bid);
+
+            }
         }
 
         static async Task Observe()

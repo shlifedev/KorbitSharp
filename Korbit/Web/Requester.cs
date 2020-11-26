@@ -32,7 +32,7 @@ namespace Korbit.Web
                     throw new Exception("Token Null!"); 
                 request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}");
             } 
-             
+              
             WebResponse response = await request.GetResponseAsync(); 
             HttpWebResponse httpResponse = response as HttpWebResponse; 
             var statusCode = ((HttpWebResponse)response).StatusCode;
@@ -74,17 +74,20 @@ namespace Korbit.Web
         {
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "POST";
+            request.Timeout = 2000;
+            if (isRequireToken) 
+                request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}"); 
 
-            if (isRequireToken)
-                request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}");
-
-
-
+            Console.WriteLine(request.RequestUri);
             WebResponse response = await request.GetResponseAsync();
+
+            Console.Write(response);
             HttpWebResponse httpResponse = response as HttpWebResponse;
             var statusCode = ((HttpWebResponse)response).StatusCode;
             Console.WriteLine("status code : " + statusCode);
             string responseJson = "";
+             
+ 
             if (statusCode == HttpStatusCode.OK)
             {
                 using (Stream dataStream = response.GetResponseStream())

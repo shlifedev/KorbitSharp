@@ -74,6 +74,7 @@ namespace Korbit
             
             if(refreshToken)
             {
+                Console.WriteLine("토큰 리프래시 요청중..");
                 var token = await API.oauth2.AccessToken.ReqRefresh(clientId, clientSecret, CachedToken.refresh_token);
                 if (token != null)
                 {
@@ -83,16 +84,20 @@ namespace Korbit
                     return true;
                 }
                 else
+                {
+                    Console.WriteLine("토큰 리프래시 실패");
                     return false;
+                }
             }
-            if (System.IO.File.Exists("accessToken.json"))
+            if (System.IO.File.Exists("accessToken.json") && CachedToken == null)
             {
                 Console.WriteLine("기존토큰으로 가져옴.");
                 CachedToken = JsonConvert.DeserializeObject<Model.AccessToken>(System.IO.File.ReadAllText("accessToken.json")); 
-                return true;
+                return await Login(true); 
             }
             else
             {
+                Console.WriteLine("새 토큰으로 요청중..");
                 var token = await API.oauth2.AccessToken.ReqLogin(clientId, clientSecret);
     
                 if (token != null)
