@@ -8,20 +8,35 @@ namespace Korbit
 {
     static class Program
     {
-        static async Task X()
+        static async Task Connect()
         {
             string[] idPass = System.IO.File.ReadAllLines("client_secret.txt");
             KorbitClient client = new KorbitClient(idPass[0],idPass[1]);
 
-            await client.Login(x => { });
-            await client.CheckBalances(x => {
-                Console.WriteLine(x.etc);
-            });
+            await client.Login(x => { }); 
+        }
+
+        static async Task Observe()
+        {
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Console.WriteLine(i);
+                }
+            }); 
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Console.WriteLine(i*10);
+                }
+            }); 
         }
         static void Main(string[] args)
         {
-            X();
-            Console.WriteLine("hello?");
+            Connect();
+            Observe();
             while (true) { }
         }
     }
