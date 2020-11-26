@@ -8,7 +8,7 @@ using static Korbit.API.APIBase;
 
 namespace Korbit.Model
 {
-    class AccessToken : ResponseBase
+    public class AccessToken : ResponseBase
     {
         public string token_type;
         public string access_token;
