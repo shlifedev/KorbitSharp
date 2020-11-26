@@ -49,30 +49,40 @@ namespace Korbit
         /// 잔고를 조회합니다.
         /// </summary>
         /// <returns></returns>
-        public void CheckBalances(System.Action<API.user.Balances.Response> callback)
-        { 
-            API.user.Balances.ReqBalances(callback);
+        public async Task CheckBalances(System.Action<API.user.Balances.Response> callback)
+        {
+            Console.WriteLine("CheckBalances..");
+
+            await API.user.Balances.ReqBalances(callback);
         }
         /// <summary>
         /// 코빗에 로그인합니다.
         /// </summary>
-        public void Login()
+        public async Task Login(System.Action<bool> resultCallback)
         {
+            Console.WriteLine("Try Login..");
             if (CachedToken == null)
             {
-                API.oauth2.AccessToken.ReqLogin(clientId, clientSecret, token =>
+                await API.oauth2.AccessToken.ReqLogin(clientId, clientSecret, token =>
                 {
-                    CachedToken = token;  
-                });
-                Console.WriteLine("Login Succesfully!");
+                    CachedToken = token;
+                    if(token != null) 
+                        resultCallback?.Invoke(true); 
+                    else
+                        resultCallback?.Invoke(false);
+                }); 
             }
             else
             {
-                API.oauth2.AccessToken.ReqRefresh(clientId, clientSecret, CachedToken.refresh_token, token =>
+                await API.oauth2.AccessToken.ReqRefresh(clientId, clientSecret, CachedToken.refresh_token, token =>
                 {
                     CachedToken = token;
+                    if (token != null)
+                        resultCallback?.Invoke(true);
+                    else
+                        resultCallback?.Invoke(false);
                 });
-                Console.WriteLine("Login(Refresh) Succesfully!");
+         
             } 
         } 
     }

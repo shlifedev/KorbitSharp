@@ -14,7 +14,7 @@ namespace Korbit.Web
         public string BaseURL => "https://api.korbit.co.kr/v1/";
 
 
-        public void Get<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback)
+        public async Task Get<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback)
         {
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "GET";
@@ -22,7 +22,7 @@ namespace Korbit.Web
                 request.Headers.Add("Authorization", $"{KorbitClient.CachedToken.token_type} {KorbitClient.CachedToken.access_token}");
     
 
-            WebResponse response = request.GetResponse();
+            WebResponse response = await request.GetResponseAsync();
             HttpWebResponse httpResponse = response as HttpWebResponse;
             var statusCode = ((HttpWebResponse)response).StatusCode;
             string responseJson = "";
@@ -38,11 +38,11 @@ namespace Korbit.Web
             }
         }
 
-        public void Post<T>(string resource, ParamBase content, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
+        public async Task Post<T>(string resource, ParamBase content, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
         {
-            Post<T>(resource, content, false, callback);
+            await Post<T>(resource, content, false, callback);
         }
-        public void Post<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
+        public async Task Post<T>(string resource, ParamBase content, bool isRequireToken, System.Action<T> callback) where T : Korbit.API.APIBase.ResponseBase
         {  
             WebRequest request = WebRequest.Create($"{BaseURL}{resource}{ReflectionUtility.MakeURLParameter(content)}");
             request.Method = "POST";
@@ -52,7 +52,7 @@ namespace Korbit.Web
 
 
 
-            WebResponse response = request.GetResponse();
+            WebResponse response = await request.GetResponseAsync();
             HttpWebResponse httpResponse = response as HttpWebResponse;
             var statusCode = ((HttpWebResponse)response).StatusCode;
             string responseJson = "";

@@ -8,15 +8,20 @@ namespace Korbit
 {
     static class Program
     {
-        static void Main(string[] args)
+        static async Task X()
         {
             string[] idPass = System.IO.File.ReadAllLines("client_secret.txt");
             KorbitClient client = new KorbitClient(idPass[0],idPass[1]);
-            client.Login(); 
 
-            client.CheckBalances( x=> {
-                Console.WriteLine((x.ltc.AvgPrice));
-            }); 
+            await client.Login(x => { });
+            await client.CheckBalances(x => {
+                Console.WriteLine(x.etc);
+            });
+        }
+        static void Main(string[] args)
+        {
+            X();
+            Console.WriteLine("hello?");
             while (true) { }
         }
     }

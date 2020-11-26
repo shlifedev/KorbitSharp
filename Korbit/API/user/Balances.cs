@@ -15,9 +15,9 @@ namespace Korbit.API.user
 {
     public static class Balances
     {
-        public static void ReqBalances(System.Action<Response> callback)
+        public static async Task ReqBalances(System.Action<Response> callback)
         {
-            KorbitClient.requester.Get("user/balances", null, true, callback);
+            await KorbitClient.requester.Get("user/balances", null, true, callback);
         } 
 
         public class BalancesParameter : ParamBase
