@@ -17,9 +17,7 @@ namespace SampleProgram
 
             var login = await client.Login(false); 
             if(login)
-            {  
-                var balance = await client.CheckBalances(); 
-                Console.WriteLine(balance.available);
+            { 
             } 
         }
 

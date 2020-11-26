@@ -8,6 +8,35 @@ using static Korbit.API.APIBase;
 
 namespace Korbit.Model
 {
+    public class Balances : ResponseBase
+    {
+        public Korbit.Model.Balance aergo { get; set; }
+        public Korbit.Model.Balance bat { get; set; }
+        public Korbit.Model.Balance bch { get; set; }
+        public Korbit.Model.Balance bcha { get; set; }
+        public Korbit.Model.Balance bnb { get; set; }
+        public Korbit.Model.Balance bsv { get; set; }
+        public Korbit.Model.Balance btc { get; set; }
+        public Korbit.Model.Balance dai { get; set; }
+        public Korbit.Model.Balance eos { get; set; }
+        public Korbit.Model.Balance etc { get; set; }
+        public Korbit.Model.Balance eth { get; set; }
+        public Korbit.Model.Balance fet { get; set; }
+        public Korbit.Model.Balance fil { get; set; }
+        public Korbit.Model.Balance krw { get; set; }
+        public Korbit.Model.Balance link { get; set; }
+        public Korbit.Model.Balance ltc { get; set; }
+        public Korbit.Model.Balance med { get; set; }
+        public Korbit.Model.Balance mkr { get; set; }
+        public Korbit.Model.Balance omg { get; set; }
+        public Korbit.Model.Balance poly { get; set; }
+        public Korbit.Model.Balance qtum { get; set; }
+        public Korbit.Model.Balance trx { get; set; }
+        public Korbit.Model.Balance usdc { get; set; }
+        public Korbit.Model.Balance xlm { get; set; }
+        public Korbit.Model.Balance xrp { get; set; }
+        public Korbit.Model.Balance zil { get; set; }
+    }
     /// <summary>
     /// 사용자의 정보 및 남은 잔고정보.
     /// </summary>

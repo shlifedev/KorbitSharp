@@ -53,7 +53,7 @@ namespace Korbit
         /// 잔고를 조회합니다.
         /// </summary>
         /// <returns></returns>
-        public async Task<Model.Balance> CheckBalances()
+        public async Task<Model.Balances> CheckBalances()
         {
             return await API.user.Balances.ReqBalances();
         }
